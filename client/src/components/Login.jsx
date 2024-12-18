@@ -20,6 +20,8 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
     
+    console.log('API URL:', config.API_URL);
+    
     try {
       const response = await axios.post(`${config.API_URL}/users/login`, {
         email: formData.email,
