@@ -23,7 +23,12 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-app.use(cors());
+// Configure CORS with specific origin
+app.use(cors({
+    origin: process.env.FRONTEND_URL || 'https://fit-time-react-vite.onrender.com',
+    credentials: true
+}));
+
 app.use(express.json());
 
 // Request logging middleware
