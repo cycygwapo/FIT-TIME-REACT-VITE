@@ -23,15 +23,19 @@ function Login() {
     console.log('Using API URL:', apiUrl);
     
     try {
-      const response = await axios.post(`${apiUrl}/users/login`, {
-        email: formData.email,
-        password: formData.password
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
+      const response = await axios.post(`${apiUrl}/users/login`, 
+        {
+          email: formData.email,
+          password: formData.password
         },
-        withCredentials: true
-      });
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: true
+        }
+      );
 
       if (response.data && response.data.token) {
         localStorage.setItem('userToken', response.data.token);
