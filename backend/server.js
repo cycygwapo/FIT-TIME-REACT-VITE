@@ -24,28 +24,28 @@ const app = express();
 connectDB();
 
 // Configure CORS with multiple allowed origins
-const allowedOrigins = [
-    'https://fit-time-react-vite.vercel.app',
-    'https://fit-time-react-vite.onrender.com',
-    'http://localhost:5173' // Local development
-];
-
-app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        
-        if (allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            console.log('Blocked origin:', origin);
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use((req, res, next) => {
+    const allowedOrigins = [
+        'https://fit-time-react-vite.vercel.app',
+        'https://fit-time-react-vite.onrender.com',
+        'http://localhost:5173'
+    ];
+    
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
+    next();
+});
 
 app.use(express.json());
 
