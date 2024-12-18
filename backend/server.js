@@ -23,10 +23,28 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Configure CORS with specific origin
+// Configure CORS with multiple allowed origins
+const allowedOrigins = [
+    'https://fit-time-react-vite.vercel.app',
+    'https://fit-time-react-vite.onrender.com',
+    'http://localhost:5173' // Local development
+];
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'https://fit-time-react-vite.onrender.com',
-    credentials: true
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log('Blocked origin:', origin);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
