@@ -23,24 +23,18 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// CORS configuration
-app.use(cors({
-    origin: ['https://fit-time-react-vite.vercel.app', 'http://localhost:5173'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    optionsSuccessStatus: 200
-}));
-
-// Additional headers for CORS
+// Enable CORS for all routes
 app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (origin === 'https://fit-time-react-vite.vercel.app' || origin === 'http://localhost:5173') {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-    }
+    res.setHeader('Access-Control-Allow-Origin', 'https://fit-time-react-vite.vercel.app');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Headers', '*');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
     next();
 });
 
