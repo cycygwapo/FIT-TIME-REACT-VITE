@@ -19,7 +19,7 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
     
-    const apiUrl = 'https://fit-time-react-vite.vercel.app/api';
+    const apiUrl = 'https://fit-time-backend.vercel.app/api';
     console.log('Using API URL:', apiUrl);
     
     try {

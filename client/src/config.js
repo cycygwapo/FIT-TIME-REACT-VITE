@@ -1,5 +1,5 @@
 const config = {
-    API_URL: 'https://fit-time-react-vite.vercel.app/api'  // Hardcode the URL for now
+    API_URL: 'https://fit-time-backend.vercel.app/api'  // Use the backend deployment URL
 };
 
 export default config;
