@@ -26,6 +26,11 @@ function Login() {
       const response = await axios.post(`${apiUrl}/users/login`, {
         email: formData.email,
         password: formData.password
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
       });
 
       if (response.data && response.data.token) {
