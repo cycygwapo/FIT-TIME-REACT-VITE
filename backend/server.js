@@ -23,18 +23,27 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// Enable CORS for all routes
+// CORS configuration
+const corsOptions = {
+    origin: 'https://fit-time-react-vite.vercel.app',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
+// Additional CORS headers for preflight requests
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://fit-time-react-vite.vercel.app');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', '*');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    
-    // Handle preflight
+    res.header('Access-Control-Allow-Origin', 'https://fit-time-react-vite.vercel.app');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
-    
     next();
 });
 
@@ -43,6 +52,8 @@ app.use(express.json());
 // Request logging middleware
 app.use((req, res, next) => {
     console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+    console.log('Origin:', req.headers.origin);
+    console.log('Headers:', req.headers);
     next();
 });
 
