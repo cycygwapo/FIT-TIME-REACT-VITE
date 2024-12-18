@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import config from '../config';
 import logo from '../assets/logo.png';
 import { motion } from 'framer-motion';
 
@@ -20,10 +19,11 @@ function Login() {
     e.preventDefault();
     setIsLoading(true);
     
-    console.log('API URL:', config.API_URL);
+    const apiUrl = 'https://fit-time-react-vite.vercel.app/api';
+    console.log('Using API URL:', apiUrl);
     
     try {
-      const response = await axios.post(`${config.API_URL}/users/login`, {
+      const response = await axios.post(`${apiUrl}/users/login`, {
         email: formData.email,
         password: formData.password
       });
@@ -36,11 +36,8 @@ function Login() {
           role: response.data.role
         }));
         
-        // Add a delay before showing success message and redirecting
-        setTimeout(() => {
-          toast.success('Successfully logged in!');
-          navigate('/home');
-        }, 5000); // 2 second delay
+        toast.success('Successfully logged in!');
+        navigate('/home');
       } else {
         setIsLoading(false);
         toast.error('Invalid response from server');
